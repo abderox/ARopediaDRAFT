@@ -11,12 +11,14 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
 from pathlib import Path
+import pymysql
 
 # To keep secret keys in environment variables
 from dotenv import load_dotenv
 
 load_dotenv()
 
+pymysql.install_as_MySQLdb()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -86,8 +88,12 @@ WSGI_APPLICATION = 'user_management.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'ar-crud-project',
+        'USER': 'root',
+        'PASSWORD': 'root',
+        'PORT': '8889',
+        'HOST': '127.0.0.1'
     }
 }
 
