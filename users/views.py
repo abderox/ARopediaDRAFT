@@ -10,7 +10,7 @@ from .forms import RegisterForm, LoginForm, UpdateUserForm, UpdateProfileForm
 
 
 def home(request):
-    return render(request, 'users/home.html')
+    return render(request, 'users/base-home.html')
 
 
 class RegisterView(View):
