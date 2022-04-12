@@ -46,6 +46,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users.apps.UserConfig',
     'social_django',
+    'semestre',
+     'filiere',
+    'emploie',
+    'module'
 ]
 
 MIDDLEWARE = [
@@ -56,7 +60,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
 ]
 
 ROOT_URLCONF = 'user_management.urls'
@@ -91,8 +94,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'ar-crud-project',
         'USER': 'root',
-        'PASSWORD': 'root',
-        'PORT': '8889',
+        'PASSWORD': '',
+        'PORT': '3306',
         'HOST': '127.0.0.1'
     }
 }

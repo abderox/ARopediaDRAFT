@@ -17,6 +17,7 @@ To get this project up and running locally on your computer follow the following
     * python manage.py migrate
     * python manage.py createsuperuser
     * python manage.py runserver
+    * python manage.py startapp polls
    
 3. Open a browser and go to http://localhost:8000/
 
