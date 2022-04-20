@@ -1,5 +1,9 @@
+
+### Author 
+* ABDELHADI MOUZAFIR
 ### Basic Features of The App
     
+
 * Register – Users can register and create a new profile
 * Login - Registered users can login using username and password
 * User Profile - Once logged in, users can create and update additional information such as avatar and bio in the profile page
