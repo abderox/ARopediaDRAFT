@@ -1,0 +1,142 @@
+{% extends 'users/base-home.html' %}
+{% block title %}
+    Ajout Elements module
+{% endblock title %}
+{% block content %}
+<div class="content-wrapper">
+    <div class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6 col-6">
+              <h1 class="m-0 text-dark"> Ajout Element</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item active"> <a href="{% url 'manage_modules' %}">Modules / Elements_Module</a></li>
+              </ol>
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+      </div>
+    </div>
+      {% if messages %}
+      <div class="login-box-msg mb-4 ml-4 col-12 mt-5">
+        {% for message in messages %}
+        {% if message.tags == "error" %}
+        <span class="alert alert-danger">{{message}}</span>
+        {% endif %}
+        {% if message.tags == "success" %}
+        <span class="alert alert-success">{{message}}</span>
+        {% endif %}
+        {% endfor %}
+      </div>
+      {% endif %}
+    <section class="content">
+        <div class="container-fluid">
+            <div class="card card-dark">
+                <div class="card-header">
+                    <h3 class="card-title">Nouveau Element</h3>
+                </div>
+                <!-- /.card-header -->
+                <!-- form start -->
+                <form role="form" action="/add_element_module_save" method="post">
+                    {% csrf_token %}
+                    <div class="card-body">
+                    <div class="row">
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label for="example">Libelle Element</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           id="example"
+                                           placeholder="Analyse 1"
+                                           name="libelle_element_module">
+                                </div>
+                            </div>
+                            <div class="col-3">
+                              <div class="form-group">
+                                  <label for="example">Volume horaire</label>
+                                  <input type="number"
+                                         class="form-control"
+                                         id="example"
+                                         placeholder="volume horaire"
+                                         name="volumeHoraire"
+                                         min="0">
+                              </div>
+                          </div>
+                          <div class="col-3">
+                            <div class="form-group">
+                                <label>Responsable</label>
+                                <select class="form-control" name="responsable">
+                                    
+                                    {% for prof in profs %}
+                                        <option value="{{ prof.id }}">
+                                          {{ prof.nom }} {{ prof.prenom }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                          <div class="form-group">
+                              <label>Module</label>
+                              <select class="form-control" name="module_id">    
+                                  {% for module in modules %}
+                                      <option value="{{ module.id }}">
+                                          {{ module.libelle_module }}
+                                      </option>
+                                  {% endfor %}
+                              </select>
+                          </div>
+                      </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-4">
+                            <div class="form-group">
+                                <label for="example">Objectif</label>
+                                <textarea class="form-control" name="objectif" rows="4"></textarea>
+                            </div>
+                        </div>
+                            
+                          <div class="col-4">
+                            <div class="form-group">
+                                <label>Prerequis</label>
+                                <select class="form-control" name="prerequis_id" multiple>
+                                  {% if element_modules|length < 1   %}
+                                  <option >------Pas de choix ------</option>
+                                  {% endif %}
+                                  
+                                    {% for elem_module in element_modules %}
+                                        <option value="{{ elem_module.id }}">
+                                            {{ elem_module.libelle_element_module }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                          <div class="form-group">
+                              <label>Enseignants</label>
+                              <select class="form-control" name="prof" multiple>
+                                  
+                                  {% for prof in profs %}
+                                      <option value="{{ prof.id }}">
+                                          {{ prof.nom }} {{ prof.prenom }}
+                                      </option>
+                                  {% endfor %}
+                              </select>
+                          </div>
+                      </div>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-dark btn-block">Ajouter</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+      </section>
+  
+{% endblock content %}

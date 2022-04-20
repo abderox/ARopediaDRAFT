@@ -1,0 +1,84 @@
+{% extends 'users/base-home.html' %}
+{% block title %}
+    Modilfier Module #{{module.id}}
+{% endblock title %}
+{% block content %}
+<div class="content-wrapper">
+    <div class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1 class="m-0 text-dark"> Modifier Module</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item active"> <a href="{% url 'manage_modules' %}">Modules/Getion_Modules</a></li>
+              </ol>
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+      </div>
+    </div>
+      {% if messages %}
+      <div class="login-box-msg mb-4 ml-4 col-12">
+        {% for message in messages %}
+        {% if message.tags == "error" %}
+        <span class="alert alert-danger">{{message}}</span>
+        {% endif %}
+        {% if message.tags == "success" %}
+        <span class="alert alert-success">{{message}}</span>
+        {% endif %}
+        {% endfor %}
+      </div>
+      {% endif %}
+    <section class="content">
+        <div class="container-fluid">
+            <div class="card card-dark">
+                <div class="card-header">
+                    <h3 class="card-title">Modifier Module</h3>
+                </div>
+                <!-- /.card-header -->
+                <!-- form start -->
+                <form role="form" action="/edit_module_save" method="post">
+                    {% csrf_token %}
+                    <div class="card-body">
+                    <div class="row">
+                            <div class="col-8">
+                                <div class="form-group">
+                                    <label for="example">Libelle module</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           id="example"
+                                           placeholder="Course Name"
+                                           value="{{module.libelle_module}}"
+                                           name="module">
+                                </div>
+                            </div>
+                            <input type="hidden" class="form-control" name="module_id" placeholder="Enter Subject" value="{{ module.id }}">
+
+                            <div class="col-4">
+                              <div class="form-group">
+                                  <label>Semestre</label>
+                                  <select class="form-control" name="semestre_id">
+                                      <
+                                      {% for semestre in semestres %}
+                                          <option value="{{ semestre.id }}" {% if semestre.id == module.semestre.id %} selected {% endif %}>
+                                              {{ semestre.libelle_semestre }}
+                                          </option>
+                                      {% endfor %}
+                                  </select>
+                              </div>
+                          </div>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-dark btn-block">Enregister</button> 
+                    </div>
+                </form>
+            </div>
+        </div>
+      </section>
+  
+{% endblock content %}

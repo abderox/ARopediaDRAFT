@@ -4,8 +4,7 @@ from django.contrib import admin
 from users.forms import LoginForm
 from django.urls import path
 from .views import home, profile, RegisterView
-from django.conf.urls import url
-from django.urls import path, include
+from django.urls import path, include ,re_path as url
 
 
 urlpatterns = [

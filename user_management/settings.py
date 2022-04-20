@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'users.apps.UserConfig',
     'social_django',
     'semestre',
-     'filiere',
+    'filiere',
     'emploie',
     'module'
 ]

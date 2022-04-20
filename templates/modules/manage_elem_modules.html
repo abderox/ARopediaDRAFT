@@ -1,0 +1,235 @@
+{% extends 'users/base-home.html' %}
+{% block title %}
+    Gestion Elements Module
+{% endblock title %}
+{% block content %}
+    <div class="content-wrapper mt-5">
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2 ">
+                    <div class="col-sm-6">
+                        <h1 class="m-0 text-dark">Elements Module ({{ elem_modules | length }})</h1>
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item">
+                                <a href="/">Home</a>
+                            </li>
+                            <li class="breadcrumb-item active">
+                                <a href="{% url 'add_element_module' %}">Modules / Ajouter Element Module</a>
+                            </li>
+                        </ol>
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+            </div>
+            <!-- /.container-fluid -->
+        </div>
+    </div>
+    {% if messages %}
+        <div class="login-box-msg mb-4 ml-4 mt-4 col-12">
+            {% for message in messages %}
+                {% if message.tags == "error" %}<span class="alert alert-danger">{{ message }}</span>{% endif %}
+                {% if message.tags == "success" %}<span class="alert alert-success">{{ message }}</span>{% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
+    <section class="content">
+        <div class="container-fluid">
+           
+            <div class="card-body">
+                <div id="example2_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6"></div>
+                        <div class="col-sm-12 col-md-6"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+
+                        </div>
+                        <div class="col-sm-6">
+                            
+                        </div>
+                    </div>    
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <table id="example2"
+                                   class="table table-bordered table-hover dataTable"
+                                   role="grid"
+                                   aria-describedby="example2_info">
+                                <thead>
+                                    <tr role="row">
+                                        <th class="sorting"
+                                            tabindex="0"
+                                            aria-controls="example2"
+                                            rowspan="1"
+                                            colspan="1"
+                                            aria-label="ID: activate to sort column ascending">
+                                            ID
+                                        </th>
+                                        <th class="sorting"
+                                            tabindex="0"
+                                            aria-controls="example2"
+                                            rowspan="1"
+                                            colspan="1"
+                                            aria-label="First Name: activate to sort column ascending">
+                                            Element module
+                                        </th>
+                                        <th class="sorting_desc"
+                                            tabindex="0"
+                                            aria-controls="example2"
+                                            rowspan="1"
+                                            colspan="1"
+                                            aria-label="Last Name: activate to sort column ascending"
+                                            aria-sort="descending">
+                                            Module
+                                        </th>
+                                        <th class="sorting_desc"
+                                            tabindex="0"
+                                            aria-controls="example2"
+                                            rowspan="1"
+                                            colspan="1"
+                                            aria-label="Last Name: activate to sort column ascending"
+                                            aria-sort="descending">
+                                            Crée le
+                                        </th>
+                                        <th class="sorting_desc"
+                                            tabindex="0"
+                                            aria-controls="example2"
+                                            rowspan="1"
+                                            colspan="2"
+                                            aria-label="Last Name: activate to sort column ascending"
+                                            aria-sort="descending">
+                                            Responsable
+                                        </th>
+                                        <th class="sorting_desc"
+                                            tabindex="0"
+                                            aria-controls="example2"
+                                            rowspan="1"
+                                            colspan="1"
+                                            aria-label="Last Name: activate to sort column ascending"
+                                            aria-sort="descending">
+                                            Details
+                                        </th>
+                                        <th class="sorting"
+                                            tabindex="0"
+                                            aria-controls="example2"
+                                            rowspan="1"
+                                            colspan="1"
+                                            aria-label=": activate to sort column ascending">
+                                            Action
+                                        </th>
+                                    </tr>
+                                </thead>
+                                 
+                                  
+                                  <!-- Modal -->
+                                  
+                                <tbody>
+                                    {% for elem_module in elem_modules %}
+                                    <div class="modal fade" id="modal{{elem_module.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                          <div class="modal-content">
+                                            <div class="modal-header">
+                                              <h5 class="modal-title" id="exampleModalLabel">Detailes</h5>
+                                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                              </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <h5>Enseignants</h5>
+                                     
+                                                <hr>
+                                                {% for prof in elem_module.prof_id.all %}
+
+                                                {{prof.nom}} {{prof.prenom}}
+                                                <br>
+                                                {% endfor %}
+                                                <hr>
+                                                
+                                            </div>
+                                            <div class="modal-footer">
+                                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                        {% cycle 'odd' 'even' as rowcolors silent %}
+                                        <tr role="row" class="{{ rowcolors }}">
+                                            <td class="font-weight-bold">{{ elem_module.id }}</td>
+                                            <td class="" style="color:black;">{{ elem_module.libelle_element_module  }}</td>
+                                            <td class="sorting_1" style="color:#000c71;">{{  elem_module.module.libelle_module }}</td>
+                                            {% if elem_module.created_at < elem_module.updated_at|timesince %}
+                                                <td "style="background-color: #80ffff">{{ elem_module.updated_at |timesince }}
+                                                </td>
+                                            {% else %}
+                                                <td>{{ elem_module.updated_at |timesince }}</td>
+                                            {% endif %}
+                                            <td>{{ elem_module.responsable.nom }}  {{ elem_module.responsable.prenom }}<td>
+                                            <td class="text-center"><a  data-toggle="modal" data-target="#modal{{elem_module.id}}"><img src="https://img.icons8.com/external-yogi-aprelliyanto-flat-yogi-aprelliyanto/32/000000/external-info-contact-and-communication-yogi-aprelliyanto-flat-yogi-aprelliyanto.png"/></a></td>
+                                            <td class="text-center">
+                                                <a href="/edit_elem_module/{{ elem_module.id }}">
+                                                    <img src="https://img.icons8.com/external-becris-lineal-becris/24/4a90e2/external-edit-mintab-for-ios-becris-lineal-becris.png"/>
+                                                </a>
+                                                <a href="/delete_elem_module/{{ elem_module.id }}">
+                                                    <img src="https://img.icons8.com/ios/24/fa314a/delete-trash.png"/>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th rowspan="1" colspan="1">ID</th>
+                                        <th rowspan="1" colspan="1">L'élément</th>
+                                        <th rowspan="1" colspan="1">Module</th>
+                                        <th rowspan="1" colspan="1">crée le</th>
+                                        <th rowspan="1" colspan="2">Responsable</th>
+                                        <th rowspan="1" colspan="1">Details</th>
+                                        <th rowspan="1" colspan="1">Action</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                            {% if modules.has_other_pages %}
+                                <ul class="pagination">
+                                    {% if modules.has_previous %}
+                                        <li>
+                                            <a href="?page={{ modules.previous_page_number }}">&laquo;</a>
+                                        </li>
+                                    {% else %}
+                                        <li class="disabled">
+                                            <span>&laquo;</span>
+                                        </li>
+                                    {% endif %}
+                                    {% for i in modules.paginator.page_range %}
+                                        {% if modules.number == i %}
+                                            <li class="active">
+                                                <span>{{ i }} <span class="sr-only">(current)</span></span>
+                                            </li>
+                                        {% else %}
+                                            <li>
+                                                <a href="?page={{ i }}">{{ i }}</a>
+                                            </li>
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% if modules.has_next %}
+                                        <li>
+                                            <a href="?page={{ modules.next_page_number }}">&raquo;</a>
+                                        </li>
+                                    {% else %}
+                                        <li class="disabled">
+                                            <span>&raquo;</span>
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock content %}

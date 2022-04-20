@@ -56,12 +56,35 @@
   </li>
 
   <!-- Nav Item - Cours -->
-  <li class="nav-item">
+  {% comment %} <li class="nav-item">
     <a class="nav-link" href="#">
       <i class="fas fa-fw fa-book"></i>
       <span>gestion des Modules</span></a
     >
-  </li>
+  </li> {% endcomment %}
+
+  <li class="nav-item active">
+    <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+        aria-expanded="true" aria-controls="collapseUtilities">
+        <i class="fas fa-fw fa-book"></i>
+        <span>gestion des Modules</span>
+    </a>
+    <div id="collapseUtilities" class="collapse show" aria-labelledby="headingUtilities"
+        data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+            <h2 class="collapse-header"> Modules</h2>
+            <a class="collapse-item active" href="{% url 'manage_modules' %}">
+              <i class="far fa-circle nav-icon fa-sm"></i> Modules</a>
+            <a class="collapse-item" href="{% url 'add_module' %}"><i class="far fa-circle nav-icon fa-sm"></i> Ajouter Module</a>
+            <hr>
+            <h2 class="collapse-header py-2">Elements de module</h2>
+            <a class="collapse-item active" href="{% url 'manage_elem_modules' %}"><i class="far fa-circle nav-icon fa-sm"></i> Elements</a>
+            <a class="collapse-item" href="{% url 'add_element_module' %}"> <i class="far fa-circle nav-icon fa-sm"></i> Ajouter element</a>
+          
+        </div>
+        
+    </div>
+</li>
 
   <!-- Nav Item - Cours -->
   <li class="nav-item">
