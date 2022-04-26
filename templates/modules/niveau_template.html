@@ -1,0 +1,92 @@
+{% extends 'users/base-home.html' %}
+{% block title %}
+    Modilfier Module #{{ module.id }}
+{% endblock title %}
+{% block content %}
+    <style>
+    body{
+        background: #eee;
+    }
+    .colorit {
+        border-color: #45ABCD;
+        font-size: large;
+    }
+    .colorit>strong {
+        color: #45ABCD;
+    }
+    .notice {
+        padding: 15px;
+        background-color: #fafafa;
+        border-left: 6px solid #7f7f84;
+        margin-bottom: 10px;
+        -webkit-box-shadow: 0 5px 8px -6px rgba(0,0,0,.2);
+           -moz-box-shadow: 0 5px 8px -6px rgba(0,0,0,.2);
+                box-shadow: 0 5px 8px -6px rgba(0,0,0,.2);
+        display: flex;
+        justify-content: space-between;
+    }
+    .notice-sm {
+        padding: 10px;
+        font-size: 80%;
+    }
+    .notice-lg {
+        padding: 35px;
+        font-size: large;
+    }
+    
+
+    </style>
+    <div class="container-fluid">
+        <div class="row  mt-5">
+            <div class="col-sm-6">
+                <h1 class=" text-dark adddown"><span style="color: #0080c0;"> {{filiere.nom_filiere}} | Niveaux</span>({{ niveaux | length }})</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">
+                        <a href="{% url 'display_majors' %}" class="text-decoration-none"><img src="https://img.icons8.com/color/24/000000/arrow-pointing-left--v2.png"/> Back</a>
+                    </li>
+                    
+                </ol>
+            </div>
+        </div>
+      
+       
+    </div>
+
+    <div class="container mt-5">
+   
+        {% for niveau in niveaux %}
+        <div class="modal fade" id="modal{{niveau.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Choisir l'action</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                   
+                    <a href="/modules/{{niveau.nom_niveau}}/modules/add_module_level" class="text-decoration-none"> <img src="https://img.icons8.com/ios-filled/50/4a90e2/return-book.png"/> Ajout de Modules</a>
+                    <hr>
+                    <a href="/modules/{{niveau.nom_niveau}}/modules/add_element_module_level" class="text-decoration-none"> <img src="https://img.icons8.com/ios-filled/50/4a90e2/courses.png"/> Ajout des Elements de modules</a>
+            
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        <div class="notice notice-info">
+        
+            <div class ="colorit">    <strong>{{niveau.nom_niveau}}</strong> </div>
+            <div><a href="#" data-toggle="modal" data-target="#modal{{niveau.id}}" class="text-decoration-none"> <img src="https://img.icons8.com/ios-filled/36/4a90e2/settings.png"/></a></div>
+
+            
+        </div>
+        {% endfor %}
+      
+    </div>
+{% endblock content %}

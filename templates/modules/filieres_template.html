@@ -1,0 +1,78 @@
+{% extends 'users/base-home.html' %}
+{% block title %}
+    Modilfier Module #{{ module.id }}
+{% endblock title %}
+{% block content %}
+    <style>
+    body{
+        background: #eee;
+    }
+    .changeit-span{
+        font-size:15px;
+    }
+   
+    .box{
+        padding:60px 0px;
+        
+    }
+    
+    .box-part{
+        background:#FFF;
+        border-radius:5px;
+        padding:40px 10px;
+        margin:30px 0px;
+        border-bottom:5px solid #0062cc;
+        border-left:5px solid #0062cc;
+        box-shadow: 4px 3px 60px 0px rgba(0,0,0,0.1);
+    }
+    .text-it{
+        margin:20px 5px;
+    }
+    
+    .fas{
+         color:#4183D7;
+    }
+    .adddown {
+        border-bottom:5px solid #0080c0;
+      width:190px;
+    }
+    </style>
+    <div class="container-fluid">
+        <div class="row  ">
+            <div class="col-sm-6">
+                <h1 class="mt-5 text-dark adddown"><span style="color: #0080c0;"> Filières</span>   ({{ filieres | length }})</h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="box"> 
+        
+        <div class="container">
+            <div class="row">
+                {% for filier in filieres %}
+                
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="box-part text-center">
+                        {% if filier.logo is not null %}
+                        <img src="/media/{{filier.logo }}"  class="rounded" alt="{{filier.nom_filiere}} " width="100" height="100"/>
+                        {% else %}
+                        <img src="https://img.icons8.com/external-vitaliy-gorbachev-lineal-vitaly-gorbachev/90/4a90e2/external-desert-landscape-vitaliy-gorbachev-lineal-vitaly-gorbachev-1.png" alt="{{filiere.nom_filiere}} "/>
+                        {% endif %}
+                        
+                        <div class="Filière mt-2" >
+                            <h4>{{filier.nom_filiere}}</h4>
+                        </div>
+                        <div class="text-it">
+                            <a href="/modules/{{filier.nom_filiere}}/niveaux" class="changeit" style="">
+                                <img src="https://img.icons8.com/ios-filled/50/4a90e2/login-rounded-right.png"/>
+                            </a>
+                        </div>
+                       
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+{% endblock content %}

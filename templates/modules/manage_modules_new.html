@@ -1,6 +1,6 @@
 {% extends 'users/base-home.html' %}
 {% block title %}
-    Gestion Elements Module
+    Gestion Modules
 {% endblock title %}
 {% block content %}
     <div class="content-wrapper mt-5">
@@ -8,7 +8,7 @@
             <div class="container-fluid">
                 <div class="row mb-2 ">
                     <div class="col-sm-6">
-                        <h1 class="m-0 text-dark">Elements Module ({{ elem_modules | length }})</h1>
+                        <h1 class="m-0 text-dark">Modules ({{ modules | length }})</h1>
                     </div>
                     <!-- /.col -->
                     <div class="col-sm-6">
@@ -17,7 +17,7 @@
                                 <a href="/">Home</a>
                             </li>
                             <li class="breadcrumb-item active">
-                                <a href="">Modules / Ajouter Element Module</a>
+                                <a href="{% url 'add_module'  %}">Modules / Ajouter_Module</a>
                             </li>
                         </ol>
                     </div>
@@ -38,7 +38,6 @@
     {% endif %}
     <section class="content">
         <div class="container-fluid">
-           
             <div class="card-body">
                 <div id="example2_wrapper" class="dataTables_wrapper dt-bootstrap4">
                     <div class="row">
@@ -75,7 +74,7 @@
                                             rowspan="1"
                                             colspan="1"
                                             aria-label="First Name: activate to sort column ascending">
-                                            Element module
+                                            Libelle module
                                         </th>
                                         <th class="sorting_desc"
                                             tabindex="0"
@@ -84,7 +83,7 @@
                                             colspan="1"
                                             aria-label="Last Name: activate to sort column ascending"
                                             aria-sort="descending">
-                                            Module
+                                            Semestre
                                         </th>
                                         <th class="sorting_desc"
                                             tabindex="0"
@@ -99,19 +98,10 @@
                                             tabindex="0"
                                             aria-controls="example2"
                                             rowspan="1"
-                                            colspan="2"
-                                            aria-label="Last Name: activate to sort column ascending"
-                                            aria-sort="descending">
-                                            Responsable
-                                        </th>
-                                        <th class="sorting_desc"
-                                            tabindex="0"
-                                            aria-controls="example2"
-                                            rowspan="1"
                                             colspan="1"
                                             aria-label="Last Name: activate to sort column ascending"
                                             aria-sort="descending">
-                                            Details
+                                            Modifié le
                                         </th>
                                         <th class="sorting"
                                             tabindex="0"
@@ -123,58 +113,25 @@
                                         </th>
                                     </tr>
                                 </thead>
-                                 
-                                  
-                                  <!-- Modal -->
-                                  
                                 <tbody>
-                                    {% for elem_module in elem_modules %}
-                                    <div class="modal fade" id="modal{{elem_module.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog" role="document">
-                                          <div class="modal-content">
-                                            <div class="modal-header">
-                                              <h5 class="modal-title" id="exampleModalLabel">Detailes</h5>
-                                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                              </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <h5>Enseignants</h5>
-                                     
-                                                <hr>
-                                                {% for prof in elem_module.prof_id.all %}
-
-                                                {{prof.nom}} {{prof.prenom}}
-                                                <br>
-                                                {% endfor %}
-                                                <hr>
-                                                
-                                            </div>
-                                            <div class="modal-footer">
-                                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </div>
+                                    {% for module in modules %}
                                         {% cycle 'odd' 'even' as rowcolors silent %}
                                         <tr role="row" class="{{ rowcolors }}">
-                                            <td class="font-weight-bold">{{ elem_module.id }}</td>
-                                            <td class="" style="color:black;">{{ elem_module.libelle_element_module  }}</td>
-                                            <td class="sorting_1" style="color:#000c71;">{{  elem_module.module.libelle_module }}</td>
-                                            {% if elem_module.created_at < elem_module.updated_at|timesince %}
-                                                <td "style="background-color: #80ffff">{{ elem_module.updated_at |timesince }}
+                                            <td class="font-weight-bold">{{ module.id }}</td>
+                                            <td class="" style="color:black;">{{ module.libelle_module  }}</td>
+                                            <td class="sorting_1" style="color:blue;">{{  module.semestre.libelle_semestre }}</td>
+                                            <td >{{ module.created_at |timesince }}</td>
+                                            {% if module.created_at < module.updated_at|timesince %}
+                                                <td "style="background-color: #80ffff">{{ module.updated_at |timesince }}
                                                 </td>
                                             {% else %}
-                                                <td>{{ elem_module.updated_at |timesince }}</td>
+                                                <td >{{ module.updated_at |timesince }}</td>
                                             {% endif %}
-                                            <td>{{ elem_module.responsable.nom }}  {{ elem_module.responsable.prenom }}<td>
-                                            <td class="text-center"><a  data-toggle="modal" data-target="#modal{{elem_module.id}}"><img src="https://img.icons8.com/external-yogi-aprelliyanto-flat-yogi-aprelliyanto/32/000000/external-info-contact-and-communication-yogi-aprelliyanto-flat-yogi-aprelliyanto.png"/></a></td>
                                             <td class="text-center">
-                                                <a href="/edit_elem_module/{{ elem_module.id }}">
+                                                <a href="/edit_module/{{ module.id }}">
                                                     <img src="https://img.icons8.com/external-becris-lineal-becris/24/4a90e2/external-edit-mintab-for-ios-becris-lineal-becris.png"/>
                                                 </a>
-                                                <a href="/delete_elem_module/{{ elem_module.id }}">
+                                                <a href="/delete_module/{{ module.id }}">
                                                     <img src="https://img.icons8.com/ios/24/fa314a/delete-trash.png"/>
                                                 </a>
                                             </td>
@@ -184,48 +141,50 @@
                                 <tfoot>
                                     <tr>
                                         <th rowspan="1" colspan="1">ID</th>
-                                        <th rowspan="1" colspan="1">L'élément</th>
-                                        <th rowspan="1" colspan="1">Module</th>
+                                        <th rowspan="1" colspan="1">Libelle module</th>
+                                        <th rowspan="1" colspan="1">Semestre</th>
                                         <th rowspan="1" colspan="1">crée le</th>
-                                        <th rowspan="1" colspan="2">Responsable</th>
-                                        <th rowspan="1" colspan="1">Details</th>
+                                        <th rowspan="1" colspan="1">modifié le</th>
                                         <th rowspan="1" colspan="1">Action</th>
                                     </tr>
                                 </tfoot>
                             </table>
+                            <div class="clearfix">
+                                <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
                             {% if modules.has_other_pages %}
                                 <ul class="pagination">
                                     {% if modules.has_previous %}
-                                        <li>
-                                            <a href="?page={{ modules.previous_page_number }}">&laquo;</a>
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page={{ modules.previous_page_number }}">Previous</a>
                                         </li>
                                     {% else %}
-                                        <li class="disabled">
-                                            <span>&laquo;</span>
+                                        <li class="page-item disabled">
+                                            <span class="page-link">Previous</span>
                                         </li>
                                     {% endif %}
                                     {% for i in modules.paginator.page_range %}
                                         {% if modules.number == i %}
-                                            <li class="active">
-                                                <span>{{ i }} <span class="sr-only">(current)</span></span>
+                                            <li class="page-item active">
+                                                <span class="page-link">{{ i }} <span class="sr-only">(current)</span></span>
                                             </li>
                                         {% else %}
-                                            <li>
-                                                <a href="?page={{ i }}">{{ i }}</a>
+                                            <li class="page-item">
+                                                <a class="page-link" href="?page={{ i }}">{{ i }}</a>
                                             </li>
                                         {% endif %}
                                     {% endfor %}
                                     {% if modules.has_next %}
-                                        <li>
-                                            <a href="?page={{ modules.next_page_number }}">&raquo;</a>
+                                        <li class="page-item ">
+                                            <a class="page-link" href="?page={{ modules.next_page_number }}">Next</a>
                                         </li>
                                     {% else %}
-                                        <li class="disabled">
-                                            <span>&raquo;</span>
+                                        <li class="disabled page-item">
+                                            <span class="page-link">Next</span>
                                         </li>
                                     {% endif %}
                                 </ul>
                             {% endif %}
+                        </div>
                         </div>
                     </div>
                 </div>

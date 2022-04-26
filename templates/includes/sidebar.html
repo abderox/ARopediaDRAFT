@@ -72,14 +72,13 @@
     <div id="collapseUtilities" class="collapse show" aria-labelledby="headingUtilities"
         data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
-            <h2 class="collapse-header"> Modules</h2>
-            <a class="collapse-item active" href="{% url 'manage_modules' %}">
-              <i class="far fa-circle nav-icon fa-sm"></i> Modules</a>
-            <a class="collapse-item" href="{% url 'add_module' %}"><i class="far fa-circle nav-icon fa-sm"></i> Ajouter Module</a>
+            <h2 class="collapse-header"> Modules par filière</h2>
+            <a class="collapse-item active" href="{% url 'display_majors' %}">
+              <i class="far fa-circle nav-icon fa-sm"></i> Fillières</a>
+
             <hr>
-            <h2 class="collapse-header py-2">Elements de module</h2>
-            <a class="collapse-item active" href="{% url 'manage_elem_modules' %}"><i class="far fa-circle nav-icon fa-sm"></i> Elements</a>
-            <a class="collapse-item" href="{% url 'add_element_module' %}"> <i class="far fa-circle nav-icon fa-sm"></i> Ajouter element</a>
+            <h2 class="collapse-header py-2">Tous Modules</h2>
+            <a class="collapse-item active" href="{% url 'manage_modules' %}"><i class="far fa-circle nav-icon fa-sm"></i> Modules</a>
           
         </div>
         

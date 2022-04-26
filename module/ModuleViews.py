@@ -10,10 +10,17 @@ from module.models import *
 from semestre.models import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
+
 @login_required
 def add_module(request):
     semestres = Semestre.objects.all()
-    return render(request, "modules/add_module_template.html",{"semestres":semestres})
+    return render(request, "modules/add_module_template_no_tree.html", {"semestres": semestres})
+@login_required
+def add_module_level(request,name_):
+    niveau = Niveau.objects.get(nom_niveau=name_)
+    semestres = Semestre.objects.filter(niveau=niveau)
+    
+    return render(request, "modules/add_module_template.html", {"semestres": semestres , "filiere" : niveau.filliere , "niveau" : niveau})
 
 
 @login_required
@@ -30,19 +37,28 @@ def add_module_save(request):
                 libelle_module=module_libelle, semestre=semestre)
             course.save()
             messages.success(request, "Le module est ajouté avec succès !")
-            return HttpResponseRedirect(reverse(add_module))
+            return HttpResponseRedirect(reverse(add_module_level,  kwargs={'name_':semestre.niveau.nom_niveau}))
 
         except:
             messages.error(request, "Echec d'ajout du module !")
-            return HttpResponseRedirect(reverse(add_module))
+            return HttpResponseRedirect(reverse(add_module_level))
 
+
+# @login_required
+# def add_element_module(request):
+#     modules = Module.objects.all()
+#     profs = Professeur.objects.all()
+#     prerequis = ElementModule.objects.all()
+#     return render(request, "modules/add_elem_module_template.html", {"profs": profs, "modules": modules, "element_modules": prerequis})
 
 @login_required
-def  add_element_module(request):
-    modules = Module.objects.all()
+def add_element_module_level(request,name_):
+    niveau = Niveau.objects.get(nom_niveau=name_)
+    semestre = Semestre.objects.filter(niveau=niveau) 
+    modules = Module.objects.filter(semestre__in=semestre)
     profs = Professeur.objects.all()
     prerequis = ElementModule.objects.all()
-    return render(request,"modules/add_elem_module_template.html",{"profs":profs , "modules": modules , "element_modules":prerequis}) 
+    return render(request, "modules/add_elem_module_template.html", {"profs": profs, "modules": modules, "element_modules": prerequis,"niveau": niveau,"filiere":niveau.filliere})
 
 
 @login_required
@@ -57,22 +73,21 @@ def add_element_module_save(request):
         objectif = request.POST.get("objectif")
         prof_id = request.POST.getlist("prof")
         module = Module.objects.get(id=module_id)
-        responsable = request.POST.get("responsable") 
-        
-        # prof = Professeur.objects.get(id=1) 
-        # # preqd = ElementModule.objects.get(id=14) 
-       
+        responsable = request.POST.get("responsable")
+        niveau = request.POST.get("niveau")
+        # prof = Professeur.objects.get(id=1)
+        # # preqd = ElementModule.objects.get(id=14)
+
         # element_module.prof_id.add(prof)
-        #prere = Perequis.objects.create(element_module_id=element_module, prerequis_id=preqd)   
+        #prere = Perequis.objects.create(element_module_id=element_module, prerequis_id=preqd)
 
         try:
-            
-            
-            respo = Professeur.objects.get(id=responsable)     
+
+            respo = Professeur.objects.get(id=responsable)
             element_module = ElementModule.objects.create(libelle_element_module=libelle_element_module, volumeHoraire=volumeHoraire,
-                                                            objectif=objectif,
-                                                            module=module,responsable=respo)
-            
+                                                          objectif=objectif,
+                                                          module=module, responsable=respo)
+
             for pr in prof_id:
                 prof = Professeur.objects.get(id=pr)
                 element_module.prof_id.add(prof)
@@ -83,34 +98,27 @@ def add_element_module_save(request):
             # element_module = ElementModule.objects.create(libelle_element_module=libelle_element_module, volumeHoraire=volumeHoraire,
             #                                                 objectif=objectif,
             #                                                 module=module, prof_id=prof)
-            
-            
-            for preq in prerequis_id:
-                preqd = ElementModule.objects.get(id=int(preq))  
-                d = Perequis.objects.create(element_module_id=element_module, prerequis_id=preqd)   
-                d.save() 
-                                                                  
-            
 
-            
-                
-            
-            
-          
-            messages.success(request, "L'élément de module est ajouté avec succès !")
-            return HttpResponseRedirect(reverse(add_element_module))
+            for preq in prerequis_id:
+                preqd = ElementModule.objects.get(id=int(preq))
+                d = Perequis.objects.create(
+                    element_module_id=element_module, prerequis_id=preqd)
+                d.save()
+
+            messages.success(
+                request, "L'élément de module est ajouté avec succès !")
+            return HttpResponseRedirect(reverse(add_element_module_level,  kwargs={'name_':niveau}))
 
         except:
 
-            messages.error(request, "Echec au niveau d'ajout de l'element de module ! ")
-            return HttpResponse(prof_id)
-
-
+            messages.error(
+                request, "Echec au niveau d'ajout de l'element de module ! ")
+            return HttpResponseRedirect(reverse(add_element_module_level,  kwargs={'name_':niveau}))
 
 
 @login_required
 def edit_element_module_save(request):
-    if request.method!="POST":
+    if request.method != "POST":
         return HttpResponse("<h2>Method is Not Allowed</h2>")
     else:
         libelle_element_module = request.POST.get("libelle_element_module")
@@ -123,27 +131,28 @@ def edit_element_module_save(request):
 
         try:
             module = Module.objects.get(id=module_id)
-            prerequis =ElementModule.objects.get(id=prerequis_id)
+            prerequis = ElementModule.objects.get(id=prerequis_id)
             prof = Professeur.objects.get(id=prof_id)
             element_module = ElementModule.objects.get(id=element_id)
-            
-            element_module.libelle_element_module=libelle_element_module
-            element_module.volumeHoraire=volumeHoraire
-            element_module.objectif=objectif
-            element_module.module_id=module
-            element_module.prof_id=prof
-            
-            
+
+            element_module.libelle_element_module = libelle_element_module
+            element_module.volumeHoraire = volumeHoraire
+            element_module.objectif = objectif
+            element_module.module_id = module
+            element_module.prof_id = prof
+
             prerequis_ = Perequis.objects.get(id=prerequis)
-            prerequis_.element_module_id=element_module
-            prerequis_.prerequis_id=prerequis
+            prerequis_.element_module_id = element_module
+            prerequis_.prerequis_id = prerequis
             element_module.save()
             prerequis_.save()
 
-            messages.success(request,"L'élément de module est modifié avec succès")
-            return HttpResponse(reverse("edit_module",kwargs={"element_id":element_id}))
+            messages.success(
+                request, "L'élément de module est modifié avec succès")
+            return HttpResponse(reverse("edit_module", kwargs={"element_id": element_id}))
         except:
-            messages.error(request, "Echec au niveau de modifier l'element de module ! ")
+            messages.error(
+                request, "Echec au niveau de modifier l'element de module ! ")
             return HttpResponseRedirect(reverse(add_element_module))
 
 
@@ -159,8 +168,8 @@ def edit_module_save(request):
         semestre = Semestre.objects.get(id=semestre_id)
         try:
             course = Module.objects.get(id=module_id)
-            course.libelle_module=module_libelle
-            course.semestre=semestre
+            course.libelle_module = module_libelle
+            course.semestre = semestre
             course.save()
             messages.success(request, "Le module est modifié avec succès !")
             return HttpResponseRedirect(reverse(manage_modules))
@@ -170,30 +179,31 @@ def edit_module_save(request):
             return HttpResponseRedirect(reverse(manage_modules))
 
 
-
 @login_required
 def manage_modules(request):
     modules = Module.objects.all()
     page = request.GET.get('page', 1)
-    
-    paginator = Paginator(modules, 30)
+
+    paginator = Paginator(modules, 5)
     try:
         modules_ = paginator.page(page)
     except PageNotAnInteger:
         modules_ = paginator.page(1)
     except EmptyPage:
         modules_ = paginator.page(paginator.num_pages)
-        
+
     return render(request, "modules/manage_modules.html", {"modules": modules_})
+
 
 @login_required
 def manage_elem_modules(request):
     elem_modules = ElementModule.objects.all()
 
-    return render(request, "modules/manage_elem_modules.html", {"elem_modules": elem_modules })
+    return render(request, "modules/manage_elem_modules.html", {"elem_modules": elem_modules})
+
 
 @login_required
-def delete_module(request,id_):
+def delete_module(request, id_):
     try:
         Module.objects.filter(id=id_).delete()
         messages.success(request, "Le module est supprimé avec succès !")
@@ -201,15 +211,31 @@ def delete_module(request,id_):
     except:
         messages.error(request, "Echec de la suppression !")
         return HttpResponseRedirect(reverse(manage_modules))
-    
 
-@login_required    
-def delete_elem_module(request,id_):
+
+@login_required
+def delete_elem_module(request, id_):
     ElementModule.objects.filter(id=id_).delete()
     return HttpResponseRedirect(reverse(manage_elem_modules))
 
+
 @login_required
-def edit_module(request,id_):
+def edit_module(request, id_):
     semestres = Semestre.objects.all()
     module = Module.objects.get(id=id_)
-    return render(request, "modules/edit_module_template.html",{"module":module,"semestres":semestres})
+    return render(request, "modules/edit_module_template.html", {"module": module, "semestres": semestres})
+
+
+@login_required
+def display_majors(request):
+    filieres = Filiere.objects.all()
+
+    return render(request, "modules/filieres_template.html", {"filieres": filieres})
+
+@login_required
+def display_levels(request,name_):
+    filiere = Filiere.objects.get(nom_filiere=name_)
+    niveaux = Niveau.objects.filter(filliere=filiere)
+
+    return render(request, "modules/niveau_template.html", {"filiere": filiere , "niveaux" : niveaux})
+
