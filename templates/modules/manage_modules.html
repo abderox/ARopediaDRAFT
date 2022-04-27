@@ -3,7 +3,7 @@
     Gestion Modules
 {% endblock title %}
 {% block content %}
-<style>
+    <style>
 
 .table-responsive {
     margin: 30px 0;
@@ -188,32 +188,32 @@ table.table .avatar {
 	margin-top: 10px;
 	font-size: 13px;
 }    
-</style>
-<div class="content-wrapper mt-5">
-    <div class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2 ">
-                <div class="col-sm-6">
-                    <h1 class="m-0 text-dark">Modules ({{ modules | length }})</h1>
+    </style>
+    <div class="content-wrapper mt-5">
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2 ">
+                    <div class="col-sm-6">
+                        <h1 class="m-0 text-dark">Modules ({{ modules | length }})</h1>
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item">
+                                <a href="{% url 'display_majors' %}" class="text-decoration-none">
+                                    <img src="https://img.icons8.com/color/24/000000/arrow-pointing-left--v2.png"/>
+                                Back</a>
+                            </li>
+                        </ol>
+                    </div>
+                    <!-- /.col -->
                 </div>
-                <!-- /.col -->
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item">
-                            <a href="{% url 'display_majors' %}" class="text-decoration-none"><img src="https://img.icons8.com/color/24/000000/arrow-pointing-left--v2.png"/> Back</a>
-                        </li>
-                      
-                    </ol>
-                </div>
-                <!-- /.col -->
+                <!-- /.row -->
             </div>
-            <!-- /.row -->
+            <!-- /.container-fluid -->
         </div>
-        <!-- /.container-fluid -->
     </div>
-</div>
-{% if messages %}
-
+    {% if messages %}
         <div class="login-box-msg mb-4 ml-4 mt-4 col-12">
             {% for message in messages %}
                 {% if message.tags == "error" %}<span class="alert alert-danger">{{ message }}</span>{% endif %}
@@ -224,79 +224,58 @@ table.table .avatar {
     <div class="container-xl">
         <div class="table-responsive">
             <div class="table-wrapper">
-                
                 <div class="table-filter">
                     <div class="row">
-                        <div class="col-sm-3">
-                            <div class="show-entries">
-                                <span>Show</span>
-                                <select class="form-control">
-                                    <option>
-                                        5
-                                    </option>
-                                    <option>
-                                        10
-                                    </option>
-                                    <option>
-                                        15
-                                    </option>
-                                    <option>
-                                        20
-                                    </option>
-                                </select>
-                                <span>entries</span>
-                            </div>
-                        </div>
-                        <div class="col-sm-9">
+                        
+                        <div class="col">
                             <button type="button" class="btn btn-primary">
                                 <i class="fa fa-search"></i>
                             </button>
                             <div class="filter-group">
-                                <label>Name</label>
+                                <label>Module</label>
                                 <input type="text" class="form-control">
                             </div>
+                            <div class="filter-group" >
+                                <label>Filière</label>
+                                <select class="form-control" id="dynamic_select_">
+                                    <option value="{% url 'manage_modules' %}">Tous</option>
+                                    {% for filiere in filieres %}
+                                   
+                                    <option value="{% url 'search_modules_filiere' name_=filiere.nom_filiere %}">
+
+                                          {{ filiere.nom_filiere }}
+                                      </option>
+                                  {% endfor %}
+                                </select>
+                            </div>
+                           
                             <div class="filter-group">
-                                <label>Location</label>
-                                <select class="form-control">
-                                    <option>
-                                        All
+                                <label>Niveau</label>
+                                <select class="form-control" id="dynamic_select1">
+                                    <option value="{% url 'manage_modules' %}">Tous</option>
+                                    {% for niveau in niveaux %}
+                                    <option value="{% url 'search_modules_niveau' name_=niveau.nom_niveau  %}">
+                                       
+                                        {{ niveau.nom_niveau }}
+
                                     </option>
-                                    <option>
-                                        Berlin
-                                    </option>
-                                    <option>
-                                        London
-                                    </option>
-                                    <option>
-                                        Madrid
-                                    </option>
-                                    <option>
-                                        New York
-                                    </option>
-                                    <option>
-                                        Paris
-                                    </option>
+                                {% endfor %}
+
                                 </select>
                             </div>
                             <div class="filter-group">
-                                <label>Status</label>
-                                <select class="form-control">
-                                    <option>
-                                        Any
+                                <label>Semestre</label>
+                                <select class="form-control" id="dynamic_select">
+                                    <option value="{% url 'manage_modules' %}">Tous</option>
+                                    {% for semestre in semestres %}
+                                    <option value="{% url 'search_modules_semestres' name_=semestre.libelle_semestre %}">
+                                       
+                                        {{ semestre.libelle_semestre }}
+
                                     </option>
-                                    <option>
-                                        Delivered
-                                    </option>
-                                    <option>
-                                        Shipped
-                                    </option>
-                                    <option>
-                                        Pending
-                                    </option>
-                                    <option>
-                                        Cancelled
-                                    </option>
+                                {% endfor %}
                                 </select>
+           
                             </div>
                             <span class="filter-icon"><i class="fa fa-filter"></i></span>
                         </div>
@@ -337,6 +316,24 @@ table.table .avatar {
                                 colspan="1"
                                 aria-label="Last Name: activate to sort column ascending"
                                 aria-sort="descending">
+                                Filière
+                            </th>
+                            <th class="sorting_desc"
+                                tabindex="0"
+                                aria-controls="example2"
+                                rowspan="1"
+                                colspan="1"
+                                aria-label="Last Name: activate to sort column ascending"
+                                aria-sort="descending">
+                                Niveau
+                            </th>
+                            <th class="sorting_desc"
+                                tabindex="0"
+                                aria-controls="example2"
+                                rowspan="1"
+                                colspan="1"
+                                aria-label="Last Name: activate to sort column ascending"
+                                aria-sort="descending">
                                 Crée le
                             </th>
                             <th class="sorting_desc"
@@ -363,8 +360,10 @@ table.table .avatar {
                             {% cycle 'odd' 'even' as rowcolors silent %}
                             <tr role="row" class="{{ rowcolors }}">
                                 <td class="font-weight-bold">{{ module.id }}</td>
-                                <td class="" style="color:black;">{{ module.libelle_module  }}</td>
+                                <td class="font-weight-bold " style="color:black;">{{ module.libelle_module  }}</td>
                                 <td class="sorting_1" style="color:blue;">{{  module.semestre.libelle_semestre }}</td>
+                                <td class="font-weight-bold text-info" >{{ module.semestre.niveau.filliere.nom_filiere  }}</td>
+                                <td class="text-success" >{{ module.semestre.niveau.nom_niveau  }}</td>
                                 <td >{{ module.created_at |timesince }}</td>
                                 {% if module.created_at < module.updated_at|timesince %}
                                     <td "style="background-color: #80ffff">{{ module.updated_at |timesince }}
@@ -382,57 +381,95 @@ table.table .avatar {
                                 </td>
                             </tr>
                         {% endfor %}
-                            <tfoot>
-                                <tr>
-                                    <th rowspan="1" colspan="1">ID</th>
-                                    <th rowspan="1" colspan="1">Libelle module</th>
-                                    <th rowspan="1" colspan="1">Semestre</th>
-                                    <th rowspan="1" colspan="1">crée le</th>
-                                    <th rowspan="1" colspan="1">modifié le</th>
-                                    <th rowspan="1" colspan="1">Action</th>
-                                </tr>
-                            </tfoot>
-                        </tbody>
-                    </table>
-                    <div class="clearfix">
-                        <div class="hint-text">
-                        Showing <b>5</b> out of <b>25</b> entries
-                    </div>
-                    {% if modules.has_other_pages %}
-                        <ul class="pagination">
-                            {% if modules.has_previous %}
-                                <li class="page-item">
-                                    <a class="page-link" href="?page={{ modules.previous_page_number }}">Previous</a>
-                                </li>
-                            {% else %}
-                                <li class="page-item disabled">
-                                    <span class="page-link">Previous</span>
-                                </li>
-                            {% endif %}
-                            {% for i in modules.paginator.page_range %}
-                                {% if modules.number == i %}
-                                    <li class="page-item active">
-                                        <span class="page-link">{{ i }} <span class="sr-only">(current)</span></span>
-                                    </li>
-                                {% else %}
-                                    <li class="page-item">
-                                        <a class="page-link" href="?page={{ i }}">{{ i }}</a>
-                                    </li>
-                                {% endif %}
-                            {% endfor %}
-                            {% if modules.has_next %}
-                                <li class="page-item ">
-                                    <a class="page-link" href="?page={{ modules.next_page_number }}">Next</a>
-                                </li>
-                            {% else %}
-                                <li class="disabled page-item">
-                                    <span class="page-link">Next</span>
-                                </li>
-                            {% endif %}
-                        </ul>
-                    {% endif %}
+                        <tfoot>
+                            <tr>
+                                <th rowspan="1" colspan="1">ID</th>
+                                <th rowspan="1" colspan="1">Libelle module</th>
+                                <th rowspan="1" colspan="1">Semestre</th>
+                                <th rowspan="1" colspan="1">Filière</th>
+                                <th rowspan="1" colspan="1">Niveau</th>
+                                <th rowspan="1" colspan="1">crée le</th>
+                                <th rowspan="1" colspan="1">modifié le</th>
+                                <th rowspan="1" colspan="1">Action</th>
+                            </tr>
+                        </tfoot>
+                    </tbody>
+                </table>
+                <div class="clearfix">
+                    <div class="hint-text">
+                    Showing <b>5</b> out of <b>25</b> entries
                 </div>
+                {% if modules.has_other_pages %}
+                    <ul class="pagination">
+                        {% if modules.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ modules.previous_page_number }}">Previous</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link">Previous</span>
+                            </li>
+                        {% endif %}
+                        {% for i in modules.paginator.page_range %}
+                            {% if modules.number == i %}
+                                <li class="page-item active">
+                                    <span class="page-link">{{ i }} <span class="sr-only">(current)</span></span>
+                                </li>
+                            {% else %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if modules.has_next %}
+                            <li class="page-item ">
+                                <a class="page-link" href="?page={{ modules.next_page_number }}">Next</a>
+                            </li>
+                        {% else %}
+                            <li class="disabled page-item">
+                                <span class="page-link">Next</span>
+                            </li>
+                        {% endif %}
+                    </ul>
+                {% endif %}
             </div>
         </div>
     </div>
-    {% endblock content %}
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"
+        ></script>
+                                <script>
+                                    $(function(){
+                                     
+                                      $('#dynamic_select').on('change', function () {
+                                          var url = $(this).val(); // get selected value
+                                          if (url) { // require a URL
+                                              window.location = url; // redirect
+                                          }
+                                          return false;
+                                      });
+                                    });
+                                    $(function(){
+                                     
+                                        $('#dynamic_select_').on('change', function () {
+                                            var url = $(this).val(); // get selected value
+                                            if (url) { // require a URL
+                                                window.location = url; // redirect
+                                            }
+                                            return false;
+                                        });
+                                      });
+                                      $(function(){
+                                     
+                                        $('#dynamic_select1').on('change', function () {
+                                            var url = $(this).val(); // get selected value
+                                            if (url) { // require a URL
+                                                window.location = url; // redirect
+                                            }
+                                            return false;
+                                        });
+                                      });
+                                </script>
+
+                               
+{% endblock content %}

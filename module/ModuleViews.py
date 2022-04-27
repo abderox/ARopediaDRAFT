@@ -182,6 +182,10 @@ def edit_module_save(request):
 @login_required
 def manage_modules(request):
     modules = Module.objects.all()
+    semestres = Semestre.objects.all().values('libelle_semestre').distinct()
+    niveaux = Niveau.objects.all()
+    filieres = Filiere.objects.all()
+    
     page = request.GET.get('page', 1)
 
     paginator = Paginator(modules, 5)
@@ -192,14 +196,91 @@ def manage_modules(request):
     except EmptyPage:
         modules_ = paginator.page(paginator.num_pages)
 
-    return render(request, "modules/manage_modules.html", {"modules": modules_})
+    return render(request, "modules/manage_modules.html", {"modules": modules_,"filieres":filieres,"semestres":semestres,"niveaux":niveaux})
+
+@login_required
+def search_modules_semestres(request,name_):
+       
+    semestres = Semestre.objects.filter(libelle_semestre=name_)
+    semestres_ = Semestre.objects.values('libelle_semestre').distinct()
+    modules = Module.objects.filter(semestre__in=semestres)
+    niveaux = Niveau.objects.all()
+    filieres = Filiere.objects.all()
+    
+    page = request.GET.get('page', 1)
+
+    paginator = Paginator(modules, 5)
+    try:
+        modules_ = paginator.page(page)
+    except PageNotAnInteger:
+        modules_ = paginator.page(1)
+    except EmptyPage:
+        modules_ = paginator.page(paginator.num_pages)
+
+    return render(request, "modules/manage_modules.html", {"modules": modules_,"filieres":filieres,"semestres":semestres_,"niveaux":niveaux})
+
+@login_required
+def search_modules_filiere(request,name_):
+       
+    filiere = Filiere.objects.get(nom_filiere=name_)
+    filieres = Filiere.objects.all()
+    niveaux = Niveau.objects.filter(filliere=filiere)
+    semestres = Semestre.objects.filter(niveau__in=niveaux)
+    modules = Module.objects.filter(semestre__in=semestres)
+    
+    
+    page = request.GET.get('page', 1)
+
+    paginator = Paginator(modules, 5)
+    try:
+        modules_ = paginator.page(page)
+    except PageNotAnInteger:
+        modules_ = paginator.page(1)
+    except EmptyPage:
+        modules_ = paginator.page(paginator.num_pages)
+
+    return render(request, "modules/manage_modules.html", {"modules": modules,"filieres":filieres,"semestres":semestres,"niveaux":niveaux})
+
+@login_required
+def search_modules_niveau(request,name_):
+       
+    
+    filieres = Filiere.objects.all()
+    niveaux = Niveau.objects.all()
+    niveau = Niveau.objects.filter(nom_niveau=name_)
+    semestres = Semestre.objects.filter(niveau__in=niveau)
+    modules = Module.objects.filter(semestre__in=semestres)
+    
+    
+    page = request.GET.get('page', 1)
+
+    paginator = Paginator(modules, 5)
+    try:
+        modules_ = paginator.page(page)
+    except PageNotAnInteger:
+        modules_ = paginator.page(1)
+    except EmptyPage:
+        modules_ = paginator.page(paginator.num_pages)
+
+    return render(request, "modules/manage_modules.html", {"modules": modules,"filieres":filieres,"semestres":semestres,"niveaux":niveaux})
+
 
 
 @login_required
 def manage_elem_modules(request):
     elem_modules = ElementModule.objects.all()
+    prerequis = Perequis.objects.all()
+    page = request.GET.get('page', 1)
 
-    return render(request, "modules/manage_elem_modules.html", {"elem_modules": elem_modules})
+    paginator = Paginator(elem_modules, 5)
+    try:
+        elem_modules_ = paginator.page(page)
+    except PageNotAnInteger:
+        elem_modules_ = paginator.page(1)
+    except EmptyPage:
+        elem_modules_ = paginator.page(paginator.num_pages)
+    
+    return render(request, "modules/manage_elem_modules.html", {"elem_modules": elem_modules_,"prerequis":prerequis})
 
 
 @login_required
@@ -215,8 +296,14 @@ def delete_module(request, id_):
 
 @login_required
 def delete_elem_module(request, id_):
-    ElementModule.objects.filter(id=id_).delete()
-    return HttpResponseRedirect(reverse(manage_elem_modules))
+    try:
+        ElementModule.objects.filter(id=id_).delete()
+        messages.success(request, "Le module est supprimé avec succès !")
+        return HttpResponseRedirect(reverse(manage_elem_modules))
+
+    except:
+        messages.error(request, "Echec de la suppression !")
+        return HttpResponseRedirect(reverse(manage_modules))
 
 
 @login_required

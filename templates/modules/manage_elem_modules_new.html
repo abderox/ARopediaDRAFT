@@ -194,7 +194,7 @@
             <div class="container-fluid">
                 <div class="row mb-2 ">
                     <div class="col-sm-6">
-                        <h1 class="m-0 text-dark">Elements Module ({{ elem_modules | length }})</h1>
+                        <h1 class="m-0 text-dark">Elements Module ({{ elements_modules | length }})</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
@@ -225,16 +225,36 @@
                     
                     <div class="table-filter">
                         <div class="row">
-                            <div class="col">
+                            <div class="col-sm-3">
+                                <div class="show-entries">
+                                    <span>Show</span>
+                                    <select class="form-control">
+                                        <option>
+                                            5
+                                        </option>
+                                        <option>
+                                            10
+                                        </option>
+                                        <option>
+                                            15
+                                        </option>
+                                        <option>
+                                            20
+                                        </option>
+                                    </select>
+                                    <span>entries</span>
+                                </div>
+                            </div>
+                            <div class="col-sm-9">
                                 <button type="button" class="btn btn-primary">
                                     <i class="fa fa-search"></i>
                                 </button>
                                 <div class="filter-group">
-                                    <label>Element</label>
+                                    <label>Name</label>
                                     <input type="text" class="form-control">
                                 </div>
                                 <div class="filter-group">
-                                    <label>Filière</label>
+                                    <label>Location</label>
                                     <select class="form-control">
                                         <option>
                                             All
@@ -256,33 +276,8 @@
                                         </option>
                                     </select>
                                 </div>
-                               
                                 <div class="filter-group">
-                                    <label>Niveau</label>
-                                    <select class="form-control">
-                                        <option>
-                                            All
-                                        </option>
-                                        <option>
-                                            Berlin
-                                        </option>
-                                        <option>
-                                            London
-                                        </option>
-                                        <option>
-                                            Madrid
-                                        </option>
-                                        <option>
-                                            New York
-                                        </option>
-                                        <option>
-                                            Paris
-                                        </option>
-                                    </select>
-                                </div>
-                                
-                                <div class="filter-group">
-                                    <label>Semestre</label>
+                                    <label>Status</label>
                                     <select class="form-control">
                                         <option>
                                             Any
@@ -302,7 +297,6 @@
                                     </select>
                                 </div>
                                 <span class="filter-icon"><i class="fa fa-filter"></i></span>
-                        
                             </div>
                         </div>
                     </div>
@@ -377,31 +371,21 @@
                                 <div class="modal-dialog" role="document">
                                   <div class="modal-content">
                                     <div class="modal-header">
-                                      <h5 class="modal-title" id="exampleModalLabel">Detailles</h5>
+                                      <h5 class="modal-title" id="exampleModalLabel">Detailes</h5>
                                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                       </button>
                                     </div>
                                     <div class="modal-body">
-                                        <h5 class="font-weight-bold text-info">Enseignants</h5>
+                                        <h5>Enseignants</h5>
                              
                                         <hr>
                                         {% for prof in elem_module.prof_id.all %}
 
-                                        <img src="https://img.icons8.com/ios-glyphs/30/4a90e2/person-male.png"/><a href="#" class="text-dark text-decoration-none">{{prof.nom}} {{prof.prenom}}</a> 
+                                        {{prof.nom}} {{prof.prenom}}
                                         <br>
                                         {% endfor %}
                                         <hr>
-                                        <h5 class="font-weight-bold text-info">Prerequis</h5>
-                             
-                                        <hr>
-                                        {% for pq in prerequis %}
-                                        {% if pq.element_module_id == elem_module %}
-                                        <img src="https://img.icons8.com/glyph-neue/30/4a90e2/bookmark.png"/><a href="#" class="text-dark text-decoration-none"> {{pq.element_module_id.libelle_element_module}} </a> 
-                                        {% endif %}
-                                        <br>
-                                        {% endfor %}
-
                                         
                                     </div>
                                     <div class="modal-footer">
@@ -414,7 +398,7 @@
                                 {% cycle 'odd' 'even' as rowcolors silent %}
                                 <tr role="row" class="{{ rowcolors }}">
                                     <td class="font-weight-bold">{{ elem_module.id }}</td>
-                                    <td class="font-weight-bold text-dark" style="color:black;">{{ elem_module.libelle_element_module  }}</td>
+                                    <td class="" style="color:black;">{{ elem_module.libelle_element_module  }}</td>
                                     <td class="sorting_1" style="color:#000c71;">{{  elem_module.module.libelle_module }}</td>
                                     {% if elem_module.created_at < elem_module.updated_at|timesince %}
                                         <td "style="background-color: #80ffff">{{ elem_module.updated_at |timesince }}
